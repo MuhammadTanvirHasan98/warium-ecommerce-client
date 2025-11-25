@@ -1,10 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
 import UseAxiosSecure from './UseAxiosSecure';
 import UseAuth from './UseAuth';
 
 
-const Usecart = () => {
+const useCart = () => {
     // tan stack query 
     const axiosSecure =UseAxiosSecure();
     const {user}=UseAuth();
@@ -26,4 +25,4 @@ const Usecart = () => {
   
 };
 
-export default Usecart;
+export default useCart;

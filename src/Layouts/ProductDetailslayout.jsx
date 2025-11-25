@@ -1,11 +1,26 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import { BiMinus, BiPlus, BiShoppingBag, BiHeart, BiShow } from "react-icons/bi";
-import { FaStar, FaRegStar, FaFacebookF, FaTwitter, FaYoutube, FaInstagram, FaPinterestP, FaWhatsapp } from "react-icons/fa";
+import {
+  BiMinus,
+  BiPlus,
+  BiShoppingBag,
+  BiHeart,
+  BiShow,
+} from "react-icons/bi";
+import {
+  FaStar,
+  FaRegStar,
+  FaFacebookF,
+  FaTwitter,
+  FaYoutube,
+  FaInstagram,
+  FaPinterestP,
+  FaWhatsapp,
+} from "react-icons/fa";
 import Swal from "sweetalert2";
 import UseAuth from "../hooks/UseAuth";
 import UseAxiosSecure from "../hooks/UseAxiosSecure";
-import Usecart from "../hooks/Usecart";
+import Usecart from "../hooks/useCart";
 
 // Sample icons for categories
 // Category icons
@@ -37,53 +52,81 @@ const ProductDetailslayout = () => {
 
   useEffect(() => {
     const staticCategories = [
-      { name: "Clothes", icon: dressIcon, subItems: [
+      {
+        name: "Clothes",
+        icon: dressIcon,
+        subItems: [
           { name: "Shirt", count: 300 },
           { name: "Shorts & Jeans", count: 120 },
           { name: "Jacket", count: 80 },
-          { name: "Dress & Frock", count: 80 }
-      ] },
-      { name: "Footwear", icon: shoesIcon, subItems: [
+          { name: "Dress & Frock", count: 80 },
+        ],
+      },
+      {
+        name: "Footwear",
+        icon: shoesIcon,
+        subItems: [
           { name: "Sports", count: 150 },
           { name: "Formal", count: 60 },
           { name: "Casual", count: 45 },
-          { name: "Safety Shoes", count: 45 }
-      ] },
-      { name: "Jewelry", icon: jewelryIcon, subItems: [
+          { name: "Safety Shoes", count: 45 },
+        ],
+      },
+      {
+        name: "Jewelry",
+        icon: jewelryIcon,
+        subItems: [
           { name: "Earrings", count: 40 },
           { name: "Couple Rings", count: 50 },
-          { name: "Necklace", count: 30 }
-      ] },
-      { name: "Perfume", icon: perfumeIcon, subItems: [
+          { name: "Necklace", count: 30 },
+        ],
+      },
+      {
+        name: "Perfume",
+        icon: perfumeIcon,
+        subItems: [
           { name: "Clothes Perfume", count: 40 },
           { name: "Deodorant", count: 50 },
           { name: "Flower Fragrance", count: 30 },
-          { name: "Air Freshener", count: 30 }
-      ] },
-      { name: "Cosmetics", icon: cosmeticsIcon, subItems: [
+          { name: "Air Freshener", count: 30 },
+        ],
+      },
+      {
+        name: "Cosmetics",
+        icon: cosmeticsIcon,
+        subItems: [
           { name: "Shampoo", count: 40 },
           { name: "Sunscreen", count: 50 },
           { name: "Body Wash", count: 30 },
-          { name: "Makeup kit", count: 30 }
-      ] },
-      { name: "Glasses", icon: glassesIcon, subItems: [
+          { name: "Makeup kit", count: 30 },
+        ],
+      },
+      {
+        name: "Glasses",
+        icon: glassesIcon,
+        subItems: [
           { name: "Sunglasses", count: 40 },
-          { name: "Lenses", count: 50 }
-      ] },
-      { name: "Bags", icon: bagIcon, subItems: [
+          { name: "Lenses", count: 50 },
+        ],
+      },
+      {
+        name: "Bags",
+        icon: bagIcon,
+        subItems: [
           { name: "Shopping Bag", count: 40 },
           { name: "Gym Backpack", count: 50 },
           { name: "Purse", count: 30 },
-          { name: "Wallet", count: 30 }
-      ] },
+          { name: "Wallet", count: 30 },
+        ],
+      },
     ];
     setCategories(staticCategories);
   }, []);
 
   useEffect(() => {
     fetch("/BestSeller.json")
-      .then(res => res.json())
-      .then(data => setBestSellers(data));
+      .then((res) => res.json())
+      .then((data) => setBestSellers(data));
   }, []);
 
   const toggleCategory = (index) => {
@@ -96,9 +139,15 @@ const ProductDetailslayout = () => {
     const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
     return (
       <div className="flex text-yellow-400 gap-0.5 text-sm">
-        {[...Array(fullStars)].map((_, i) => <span key={"full" + i}>★</span>)}
+        {[...Array(fullStars)].map((_, i) => (
+          <span key={"full" + i}>★</span>
+        ))}
         {halfStar && <span>☆</span>}
-        {[...Array(emptyStars)].map((_, i) => <span key={"empty" + i} className="text-gray-300">★</span>)}
+        {[...Array(emptyStars)].map((_, i) => (
+          <span key={"empty" + i} className="text-gray-300">
+            ★
+          </span>
+        ))}
       </div>
     );
   };
@@ -110,20 +159,21 @@ const ProductDetailslayout = () => {
         email: user.email,
         title: product.title,
         price: product.price,
-        image: product.image
+        image: product.image,
       };
-      axiosSecure.post('/carts', cartItem)
-        .then(res => refetch())
-        .catch(err => console.error(err));
+      axiosSecure
+        .post("/carts", cartItem)
+        .then((res) => refetch())
+        .catch((err) => console.error(err));
     } else {
       Swal.fire({
         title: "Login Required?",
         text: "You won't be able to add cart without login",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: "Login"
-      }).then(result => {
-        if (result.isConfirmed) navigate('/login');
+        confirmButtonText: "Login",
+      }).then((result) => {
+        if (result.isConfirmed) navigate("/login");
       });
     }
   };
@@ -131,33 +181,54 @@ const ProductDetailslayout = () => {
   return (
     <div className="max-w-[90%] mx-auto mt-10">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 bg-white font-sans min-h-screen">
-        
         {/* Sidebar */}
         <div className="hidden lg:block lg:sticky top-2 h-fit">
           <div className="p-4 border rounded-md bg-white">
-            <h3 className="font-semibold mb-4 text-gray-800 uppercase text-lg tracking-wide">Category</h3>
+            <h3 className="font-semibold mb-4 text-gray-800 uppercase text-lg tracking-wide">
+              Category
+            </h3>
             <ul className="space-y-3">
               {categories.map((cat, i) => (
                 <li key={i}>
                   <div
                     onClick={() => toggleCategory(i)}
-                    className={`flex justify-between items-center text-sm text-gray-800 cursor-pointer transition-all duration-300 ${openIndex === i ? "border-b py-2" : ""}`}
+                    className={`flex justify-between items-center text-sm text-gray-800 cursor-pointer transition-all duration-300 ${
+                      openIndex === i ? "border-b py-2" : ""
+                    }`}
                   >
                     <div className="flex items-center gap-2">
-                      <img className="w-6 h-6 object-contain" src={cat.icon} alt={cat.name} />
-                      <h1 className="text-gray-500 text-lg font-semibold">{cat.name}</h1>
+                      <img
+                        className="w-6 h-6 object-contain"
+                        src={cat.icon}
+                        alt={cat.name}
+                      />
+                      <h1 className="text-gray-500 text-lg font-semibold">
+                        {cat.name}
+                      </h1>
                     </div>
-                    <span className="text-gray-500 text-lg">{openIndex === i ? "−" : "+"}</span>
+                    <span className="text-gray-500 text-lg">
+                      {openIndex === i ? "−" : "+"}
+                    </span>
                   </div>
                   <div
-                    ref={el => (contentRefs.current[i] = el)}
-                    style={{ maxHeight: openIndex === i ? `${contentRefs.current[i]?.scrollHeight}px` : "0px" }}
+                    ref={(el) => (contentRefs.current[i] = el)}
+                    style={{
+                      maxHeight:
+                        openIndex === i
+                          ? `${contentRefs.current[i]?.scrollHeight}px`
+                          : "0px",
+                    }}
                     className="overflow-hidden transition-all duration-500 ease-in-out"
                   >
                     <ul className="mt-2 space-y-1 text-sm text-gray-600 py-1">
                       {cat.subItems.map((sub, j) => (
-                        <li key={j} className="flex justify-between hover:text-black cursor-pointer">
-                          <span className="text-md font-semibold text-gray-500 hover:text-black">{sub.name}</span>
+                        <li
+                          key={j}
+                          className="flex justify-between hover:text-black cursor-pointer"
+                        >
+                          <span className="text-md font-semibold text-gray-500 hover:text-black">
+                            {sub.name}
+                          </span>
                           <span className="text-gray-400">({sub.count})</span>
                         </li>
                       ))}
@@ -169,17 +240,29 @@ const ProductDetailslayout = () => {
           </div>
 
           <div className="mt-6">
-            <h3 className="font-semibold mb-4 text-gray-700 uppercase text-sm tracking-wide">Best Sellers</h3>
+            <h3 className="font-semibold mb-4 text-gray-700 uppercase text-sm tracking-wide">
+              Best Sellers
+            </h3>
             <ul className="space-y-4">
               {bestSellers.map((item, i) => (
                 <li key={i} className="flex items-center gap-3">
-                  <img className="w-20 rounded-lg" src={item.image} alt={item.name} />
+                  <img
+                    className="w-20 rounded-lg"
+                    src={item.image}
+                    alt={item.name}
+                  />
                   <div>
-                    <p className="text-md font-base text-gray-800">{item.name}</p>
+                    <p className="text-md font-base text-gray-800">
+                      {item.name}
+                    </p>
                     {renderStars(item.rating)}
                     <div className="flex flex-row gap-3 items-center">
-                      <div className="text-sm text-gray-500 line-through">${item.old}.00</div>
-                      <div className="text-md font-semibold text-gray-700">${item.price}.00</div>
+                      <div className="text-sm text-gray-500 line-through">
+                        ${item.old}.00
+                      </div>
+                      <div className="text-md font-semibold text-gray-700">
+                        ${item.price}.00
+                      </div>
                     </div>
                   </div>
                 </li>
@@ -190,14 +273,10 @@ const ProductDetailslayout = () => {
 
         {/* Main Content */}
         <div className="md:col-span-3 flex flex-col gap-6">
-
-                <Outlet />
-              </div>
-            </div>
-          </div>
-
-
-
+          <Outlet />
+        </div>
+      </div>
+    </div>
   );
 };
 

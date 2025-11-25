@@ -11,19 +11,24 @@ import {
   FaPinterestP,
   FaWhatsapp,
 } from "react-icons/fa";
-import { BiMinus, BiPlus, BiShoppingBag, BiHeart, BiShow } from "react-icons/bi";
+import {
+  BiMinus,
+  BiPlus,
+  BiShoppingBag,
+  BiHeart,
+  BiShow,
+} from "react-icons/bi";
 import axios from "axios";
 
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../hooks/UseAxiosSecure";
-import Usecart from "../../hooks/Usecart";
+import Usecart from "../../hooks/useCart";
 
 import UseAuth from "../../hooks/UseAuth";
 import { faL } from "@fortawesome/free-solid-svg-icons";
 const ProductPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-
 
   // Get product from state or sessionStorage
   const [product, setProduct] = useState(location.state?.product || null);
@@ -39,13 +44,13 @@ const ProductPage = () => {
   const [cart, isLoading, isError, refetch] = Usecart();
   const [showDiscountBox, setShowDiscountBox] = useState(false);
 
-
-
-
-
   const [reviews, setReviews] = useState([
     { id: 1, name: "Rahim", text: "Great product! Worth every penny." },
-    { id: 2, name: "Karim", text: "Good quality, but delivery was a bit late." },
+    {
+      id: 2,
+      name: "Karim",
+      text: "Good quality, but delivery was a bit late.",
+    },
     { id: 3, name: "Sadia", text: "Excellent build and performance." },
   ]);
   const { user } = UseAuth();
@@ -56,7 +61,6 @@ const ProductPage = () => {
   // console.log(product);
 
   const handleAddToCart = (product) => {
-
     if (!selectedSize) {
       Swal.fire({
         title: "Select a size",
@@ -64,7 +68,8 @@ const ProductPage = () => {
       });
 
       return;
-    } if (product.colors && !product.colors[selectedColorIndex]) {
+    }
+    if (product.colors && !product.colors[selectedColorIndex]) {
       Swal.fire({
         title: "Select a color",
         icon: "warning",
@@ -85,19 +90,18 @@ const ProductPage = () => {
         size: selectedSize, // ✅ user-selected size
         color: product.colors?.[selectedColorIndex] || null, // ✅ user-selected color
         tags: product.tags,
-        discount: product.discount
+        discount: product.discount,
       };
 
-
-
-      axiosSecure.post('/carts', cartItem)
-        .then(res => refetch())
-        .catch(err => console.error(err));
+      axiosSecure
+        .post("/carts", cartItem)
+        .then((res) => refetch())
+        .catch((err) => console.error(err));
 
       Swal.fire({
         title: "Cart added successfully!",
         icon: "success",
-        draggable: true
+        draggable: true,
       });
     } else {
       Swal.fire({
@@ -105,9 +109,9 @@ const ProductPage = () => {
         text: "You won't be able to add cart without login",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: "Login"
-      }).then(result => {
-        if (result.isConfirmed) navigate('/login');
+        confirmButtonText: "Login",
+      }).then((result) => {
+        if (result.isConfirmed) navigate("/login");
       });
     }
   };
@@ -135,7 +139,6 @@ const ProductPage = () => {
       });
     }
   };
-
 
   // Countdown example
   const [countdown, setCountdown] = useState({
@@ -185,7 +188,10 @@ const ProductPage = () => {
 
   const stockLeft = product.quantity;
   const stockTotal = 100;
-  const stockPercent = Math.max(6, Math.round(((stockTotal - stockLeft) / stockTotal) * 100));
+  const stockPercent = Math.max(
+    6,
+    Math.round(((stockTotal - stockLeft) / stockTotal) * 100)
+  );
   const width = 100;
 
   return (
@@ -207,10 +213,17 @@ const ProductPage = () => {
               <button
                 key={product.id}
                 onClick={() => setMainImage(img)}
-                className={`w-10 h-10 lg:w-20 lg:h-20 p-2 rounded border ${mainImage === img ? "border-blue-500 ring-2 ring-blue-100" : "border-gray-200"
-                  } bg-white product-shadow`}
+                className={`w-10 h-10 lg:w-20 lg:h-20 p-2 rounded border ${
+                  mainImage === img
+                    ? "border-blue-500 ring-2 ring-blue-100"
+                    : "border-gray-200"
+                } bg-white product-shadow`}
               >
-                <img src={img} alt={`thumb-${idx}`} className="w-full h-full object-contain" />
+                <img
+                  src={img}
+                  alt={`thumb-${idx}`}
+                  className="w-full h-full object-contain"
+                />
               </button>
             ))}
           </div>
@@ -221,12 +234,18 @@ const ProductPage = () => {
           <div className="flex-1 flex flex-col justify-between">
             {/* Top content */}
             <div>
-              <h1 className="text-2xl lg:text-3xl font-semibold text-gray-800">{product.productName}</h1>
+              <h1 className="text-2xl lg:text-3xl font-semibold text-gray-800">
+                {product.productName}
+              </h1>
 
               <div className="flex items-center gap-3 mt-3">
                 <div className="flex text-yellow-400">
                   {Array.from({ length: 5 }, (_, i) =>
-                    i < (product.rating || 0) ? <FaStar key={i} /> : <FaRegStar key={i} />
+                    i < (product.rating || 0) ? (
+                      <FaStar key={i} />
+                    ) : (
+                      <FaRegStar key={i} />
+                    )
                   )}
                 </div>
                 <a href="#reviews" className="text-sm text-gray-500 underline">
@@ -234,16 +253,26 @@ const ProductPage = () => {
                 </a>
               </div>
 
-              <p className="text-sm text-gray-600 mt-2 leading-6 max-w-prose">{product.shortDesc}</p>
+              <p className="text-sm text-gray-600 mt-2 leading-6 max-w-prose">
+                {product.shortDesc}
+              </p>
 
               {/* Stock / Countdown */}
               <div className="border rounded mt-2 p-5 bg-white">
                 <div className="flex items-center justify-between flex-col lg:flex-row">
                   <div className="font-medium text-gray-800">
-                    Real Time <span className="inline-block bg-blue-600 text-white px-2 py-1 rounded ml-2">24</span> Visitor Right Now!
+                    Real Time{" "}
+                    <span className="inline-block bg-blue-600 text-white px-2 py-1 rounded ml-2">
+                      24
+                    </span>{" "}
+                    Visitor Right Now!
                   </div>
                   <div className="text-sm text-gray-500">
-                    Hurry up! left <span className="text-red-500 font-semibold">{stockLeft}</span> in stock
+                    Hurry up! left{" "}
+                    <span className="text-red-500 font-semibold">
+                      {stockLeft}
+                    </span>{" "}
+                    in stock
                   </div>
                 </div>
 
@@ -252,11 +281,11 @@ const ProductPage = () => {
                     className="h-2 rounded transition-all duration-500"
                     style={{
                       width: `${stockPercent}%`,
-                      background: "linear-gradient(90deg, #ef4444 0%, #f59e0b 100%)",
+                      background:
+                        "linear-gradient(90deg, #ef4444 0%, #f59e0b 100%)",
                     }}
                   />
                 </div>
-
 
                 <div className="grid grid-cols-4 gap-4 mt-3 text-center text-black">
                   {["Days", "Hours", "Min", "Sec"].map((label, i) => (
@@ -265,27 +294,33 @@ const ProductPage = () => {
                         {i === 0
                           ? countdown.days
                           : i === 1
-                            ? String(countdown.hours).padStart(2, "0")
-                            : i === 2
-                              ? String(countdown.minutes).padStart(2, "0")
-                              : String(countdown.seconds).padStart(2, "0")}
+                          ? String(countdown.hours).padStart(2, "0")
+                          : i === 2
+                          ? String(countdown.minutes).padStart(2, "0")
+                          : String(countdown.seconds).padStart(2, "0")}
                       </div>
                       <div className="text-xs text-gray-400">{label}</div>
                     </div>
                   ))}
                 </div>
 
-                <div className="mt-2 text-center font-medium text-gray-700">Time is Running Out!</div>
+                <div className="mt-2 text-center font-medium text-gray-700">
+                  Time is Running Out!
+                </div>
               </div>
 
               {/* Price & SKU */}
               <div className="flex items-center justify-between mt-2 border-b pb-0">
                 <div>
                   <div className="text-sm text-gray-500">As low as</div>
-                  <div className="text-2xl font-bold  mt-1 text-red-500">${product.price}</div>
+                  <div className="text-2xl font-bold  mt-1 text-red-500">
+                    ${product.price}
+                  </div>
                 </div>
                 <div className="text-sm text-gray-600">
-                  <div className="uppercase text-xs text-red-500 font-bold">In stock</div>
+                  <div className="uppercase text-xs text-red-500 font-bold">
+                    In stock
+                  </div>
                   <div className="font-semibold mt-1">SKU#: {product._id}</div>
                 </div>
               </div>
@@ -302,8 +337,16 @@ const ProductPage = () => {
                         onClick={() => isAvailable && setSelectedSize(sz)}
                         disabled={!isAvailable}
                         className={`px-3 py-2 border rounded text-xs 
-                  ${selectedSize === sz && isAvailable ? "bg-gray-100 border-gray-300 font-semibold" : "bg-white border-gray-200"} 
-                  ${!isAvailable ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}
+                  ${
+                    selectedSize === sz && isAvailable
+                      ? "bg-gray-100 border-gray-300 font-semibold"
+                      : "bg-white border-gray-200"
+                  } 
+                  ${
+                    !isAvailable
+                      ? "cursor-not-allowed opacity-50"
+                      : "cursor-pointer"
+                  }`}
                       >
                         {sz}
                       </button>
@@ -316,17 +359,27 @@ const ProductPage = () => {
               <div className="mt-2 pb-0">
                 <div className="text-sm font-medium text-gray-600">COLOR</div>
                 <div className="flex gap-3 mt-2 items-center">
-                  {(product.colors || ["#2b6fb6", "#86c6ff", "#9ae6b4", "#f7c6b6"]).map((c, i) => (
+                  {(
+                    product.colors || [
+                      "#2b6fb6",
+                      "#86c6ff",
+                      "#9ae6b4",
+                      "#f7c6b6",
+                    ]
+                  ).map((c, i) => (
                     <button
                       key={i}
                       onClick={() => setSelectedColorIndex(i)}
-                      className={`w-7 h-7 rounded-full border-2 ${selectedColorIndex === i ? "border-blue-600 ring-2 ring-blue-100" : "border-gray-200"}`}
+                      className={`w-7 h-7 rounded-full border-2 ${
+                        selectedColorIndex === i
+                          ? "border-blue-600 ring-2 ring-blue-100"
+                          : "border-gray-200"
+                      }`}
                       style={{ background: c }}
                     />
                   ))}
                 </div>
               </div>
-
 
               {/* Actions & Social Icons */}
               <div className="mt-3 flex flex-col lg:flex-row gap-6 items-start lg:items-center">
@@ -385,12 +438,13 @@ const ProductPage = () => {
                 </div>
 
                 {/* Right: Discount (Only Seller Sees) */}
-
               </div>
 
               {product?.userEmail === user?.email && (
-                <div className="flex flex-col items-start gap-2 bg-gradient-to-r from-yellow-400 to-orange-500 
-                    text-white px-5 py-4 rounded-xl shadow-md mt-2">
+                <div
+                  className="flex flex-col items-start gap-2 bg-gradient-to-r from-yellow-400 to-orange-500 
+                    text-white px-5 py-4 rounded-xl shadow-md mt-2"
+                >
                   <h4 className="text-lg font-bold flex items-center gap-2">
                     🎉 Add a Special Discount
                   </h4>
@@ -403,11 +457,14 @@ const ProductPage = () => {
                   </button>
 
                   <p className="text-sm opacity-90">
-                    As the seller, you can set a custom discount for this product to attract more buyers.
+                    As the seller, you can set a custom discount for this
+                    product to attract more buyers.
                   </p>
                   {showDiscountBox && (
                     <div className="mt-4 p-4 border border-orange-400 rounded-lg bg-orange-50">
-                      <h4 className="font-bold text-orange-600 mb-2">Set Discount</h4>
+                      <h4 className="font-bold text-orange-600 mb-2">
+                        Set Discount
+                      </h4>
                       <input
                         type="number"
                         placeholder="Enter discount %"
@@ -415,23 +472,17 @@ const ProductPage = () => {
                       />
                       <button
                         className="mt-2 px-4 py-2 bg-orange-600 text-white rounded hover:bg-orange-700"
-                        onClick={()=> handleAddDiscount()}
+                        onClick={() => handleAddDiscount()}
                       >
                         Apply Discount
                       </button>
                     </div>
                   )}
-
                 </div>
               )}
-
             </div>
           </div>
-
-
         </div>
-
-
 
         {/* Tabs */}
 
@@ -439,28 +490,31 @@ const ProductPage = () => {
           {/* Tabs */}
           <div className="tabs tabs-boxed bg-transparent p-0 flex">
             <button
-              className={`tab lg:px-6 lg:py-3 !text-black border ${activeTab === "detail"
-                ? "bg-white border-gray-300"
-                : "bg-gray-100 hover:bg-gray-200 border-gray-200"
-                }`}
+              className={`tab lg:px-6 lg:py-3 !text-black border ${
+                activeTab === "detail"
+                  ? "bg-white border-gray-300"
+                  : "bg-gray-100 hover:bg-gray-200 border-gray-200"
+              }`}
               onClick={() => setActiveTab("detail")}
             >
               Detail
             </button>
             <button
-              className={`tab lg:px-6 lg:py-3 !text-black border ${activeTab === "moreInfo"
-                ? "bg-white border-gray-300"
-                : "bg-gray-100 hover:bg-gray-200 border-gray-200"
-                }`}
+              className={`tab lg:px-6 lg:py-3 !text-black border ${
+                activeTab === "moreInfo"
+                  ? "bg-white border-gray-300"
+                  : "bg-gray-100 hover:bg-gray-200 border-gray-200"
+              }`}
               onClick={() => setActiveTab("moreInfo")}
             >
               More Information
             </button>
             <button
-              className={`tab lg:px-6 lg:py-3 !text-black border ${activeTab === "reviews"
-                ? "bg-white border-gray-300"
-                : "bg-gray-100 hover:bg-gray-200 border-gray-200"
-                }`}
+              className={`tab lg:px-6 lg:py-3 !text-black border ${
+                activeTab === "reviews"
+                  ? "bg-white border-gray-300"
+                  : "bg-gray-100 hover:bg-gray-200 border-gray-200"
+              }`}
               onClick={() => setActiveTab("reviews")}
             >
               Reviews
@@ -499,23 +553,22 @@ const ProductPage = () => {
                         key={review.id}
                         className="border border-gray-200 rounded-lg p-4 shadow-sm bg-white"
                       >
-                        <p className="font-semibold !text-black">{review.name}</p>
+                        <p className="font-semibold !text-black">
+                          {review.name}
+                        </p>
                         <p className="!text-black mt-1">{review.text}</p>
                       </div>
                     ))
                   ) : (
-                    <p className="!text-black">No reviews yet. Be the first one!</p>
+                    <p className="!text-black">
+                      No reviews yet. Be the first one!
+                    </p>
                   )}
                 </div>
               </div>
             )}
           </div>
         </div>
-
-
-
-
-
       </div>
     </div>
   );

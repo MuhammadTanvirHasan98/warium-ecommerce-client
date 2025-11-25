@@ -72,6 +72,7 @@ const Login = () => {
             .then(result => {
                 const user = result.user;
                 //("User signed in:", user);
+                console.log("User signed in:", user);
 
                 //sweet alert2
 

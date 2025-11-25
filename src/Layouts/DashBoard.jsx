@@ -1,5 +1,5 @@
 import React from "react";
-import { Outlet, Link, useLocation } from "react-router-dom";
+import { Outlet, Link, useLocation, NavLink } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import {
   LayoutDashboard,
@@ -89,7 +89,10 @@ const DashBoard = () => {
         <div className="h-[60px] max-w-[1320px] mx-auto flex justify-between items-center px-6">
           <h1 className="text-xl font-bold text-gray-800">Warium Dashboard</h1>
           <nav className="flex items-center gap-2 text-sm text-gray-500">
-            <span>Home</span>
+            <NavLink to="/">
+              <span className="text-blue-600 font-medium">Home</span>
+            </NavLink>
+         
             <span className="mx-1 text-gray-400">›</span>
             <span className="text-blue-600 font-medium">{role.toUpperCase()}</span>
           </nav>
