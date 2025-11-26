@@ -84,15 +84,16 @@ export const router = createBrowserRouter([
         element: <CheckoutPage></CheckoutPage>,
       },
       {
-        path: "cart",
+        path: "/cart",
         element: <Cart></Cart>,
       },
       {
-        path: "success-payment",
+        path: "/success-payment",
         element: <SuccessPayment></SuccessPayment>,
+      
       },
       {
-        path: "fail",
+        path: "/fail",
         element: <PaymentFail></PaymentFail>,
       },
       {
