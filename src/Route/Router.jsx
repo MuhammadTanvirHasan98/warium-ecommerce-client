@@ -34,6 +34,8 @@ import Coupon from "../DashBoard/ModeratorDashboard/Coupon";
 import CouponApprovals from "../DashBoard/AdminDashboard/CouponAprovals";
 import CheckoutPage from "../Pages/CheckOut/CheckoutPage";
 import NotFound from "../Pages/NotFound/NotFound";
+import PaymentFail from "../Pages/FailedPayment/Fail";
+import SuccessPayment from "../Pages/SuccessPayment/SuccessPayment";
 
 export const router = createBrowserRouter([
   {
@@ -84,6 +86,14 @@ export const router = createBrowserRouter([
       {
         path: "cart",
         element: <Cart></Cart>,
+      },
+      {
+        path: "success-payment",
+        element: <SuccessPayment></SuccessPayment>,
+      },
+      {
+        path: "fail",
+        element: <PaymentFail></PaymentFail>,
       },
       {
         path: "products",
