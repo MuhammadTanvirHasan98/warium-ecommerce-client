@@ -1,0 +1,8 @@
+# Source - https://stackoverflow.com/a
+# Posted by omzer, modified by community. See post 'Timeline' for change history
+# Retrieved 2025-11-26, License - CC BY-SA 4.0
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
