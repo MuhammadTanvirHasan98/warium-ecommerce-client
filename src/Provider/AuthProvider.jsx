@@ -1,91 +1,89 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from "react";
 import {
-    createUserWithEmailAndPassword,
-    getAuth, onAuthStateChanged,
-    signInWithEmailAndPassword, signOut
-    , GoogleAuthProvider, signInWithPopup
+  createUserWithEmailAndPassword,
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from "firebase/auth";
-import { app } from '../Firebase/firebase.config.js'; // ✅ Make sure you're importing your Firebase config
-import useAxiosPublic from '../hooks/useAxiosPublic.jsx';
+import { app } from "../Firebase/firebase.config.js"; // ✅ Make sure you're importing your Firebase config
+import useAxiosPublic from "../hooks/useAxiosPublic.jsx";
 
 const AuthContext = createContext(null);
 const auth = getAuth(app);
 
-const AuthProvider = ({ children }) => { // ✅ Should be lowercase `children`
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+const AuthProvider = ({ children }) => {
+  // ✅ Should be lowercase `children`
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-    const axiosPublic=useAxiosPublic();
+  const axiosPublic = useAxiosPublic();
 
-    const createUser = (email, password) => {
-        setLoading(true);
-        return createUserWithEmailAndPassword(auth, email, password);
+  const createUser = (email, password) => {
+    setLoading(true);
+    return createUserWithEmailAndPassword(auth, email, password);
+  };
 
+  const signIn = (email, password) => {
+    setLoading(true);
+    return signInWithEmailAndPassword(auth, email, password);
+  };
+
+  // Google Sign-In
+  const signInWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      setLoading(true);
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user; // user information after sign-in
+      setUser(user);
+      return result;
+    } catch (error) {
+      console.error("Error signing in with Google: ", error.message);
+      throw error;
+    } finally {
+      setLoading(false);
     }
+  };
 
-    const signIn = (email, password) => {
-        setLoading(true);
-        return signInWithEmailAndPassword(auth, email, password)
-    }
+  const logOut = () => {
+    setLoading(true);
+    return signOut(auth); // ✅ This returns a Promise
+  };
 
-    // Google Sign-In
-    const signInWithGoogle = async () => {
-        const provider = new GoogleAuthProvider();
-        try {
-            setLoading(true);
-            const result = await signInWithPopup(auth, provider);
-            const user = result.user; // user information after sign-in
-            setUser(user);
-            return result;
-        } catch (error) {
-            console.error("Error signing in with Google: ", error.message);
-            throw error;
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const logOut = () => {
-        setLoading(true);
-        return signOut(auth); // ✅ This returns a Promise
-    };
-
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, currentUser => {
-            setUser(currentUser);
-            if(currentUser){
-                const userInfo={email: currentUser.email};
-                axiosPublic.post('jwt',userInfo)
-                .then(res =>{
-                    if(res.data.token){
-                        localStorage.setItem('access-token',res.data.token);
-                    }
-                    else{
-                        localStorage.removeItem('access-token',res.data.token);
-                    }
-                })
-            }
-            setLoading(false);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      if (currentUser) {
+        const userInfo = { email: currentUser.email };
+        axiosPublic.post("/jwt", userInfo).then((res) => {
+          if (res.data.token) {
+            localStorage.setItem("access-token", res.data.token);
+          } else {
+            localStorage.removeItem("access-token");
+          }
         });
+      }
+      setLoading(false);
+    });
 
-        return () => unsubscribe(); // ✅ Just call unsubscribe here
-    }, []);
+    return () => unsubscribe(); // ✅ Just call unsubscribe here
+  }, []);
 
-    const authInfo = {
-        user,
-        loading,
-        createUser,
-        signIn,
-        logOut,
-        signInWithGoogle
+  const authInfo = {
+    user,
+    loading,
+    createUser,
+    signIn,
+    logOut,
+    signInWithGoogle,
+  };
 
-    };
-
-    return (
-        <AuthContext.Provider value={authInfo}>
-            {children}
-        </AuthContext.Provider>
-    );
+  return (
+    <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
+  );
 };
 
 export { AuthProvider, AuthContext };

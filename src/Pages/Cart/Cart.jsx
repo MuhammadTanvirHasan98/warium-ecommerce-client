@@ -15,7 +15,7 @@ export default function CartPage() {
       name: item.productName,
       price: Number(item.price),
       quantity: item.quantity,
-      image: item.images?.[0]?.[0] || "/placeholder.svg",
+      image: item.images?.[0] || "/placeholder.svg",
       size: item.size,
       color: item.color,
     }));
@@ -26,9 +26,7 @@ export default function CartPage() {
   const increaseQty = (id) => {
     setCartItems((prev) =>
       prev.map((item) =>
-        item.id === id
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
+        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
       )
     );
   };
@@ -38,9 +36,7 @@ export default function CartPage() {
     setCartItems((prev) =>
       prev
         .map((item) =>
-          item.id === id
-            ? { ...item, quantity: item.quantity - 1 }
-            : item
+          item.id === id ? { ...item, quantity: item.quantity - 1 } : item
         )
         .filter((item) => item.quantity > 0)
     );
@@ -208,8 +204,12 @@ export default function CartPage() {
               </div>
 
               <div className="mt-6 bg-gray-50 border border-gray-200 p-4 rounded-lg">
-                <p className="text-xs text-gray-600">✓ Free shipping over $100</p>
-                <p className="text-xs text-gray-600 mt-1">✓ 30-day easy returns</p>
+                <p className="text-xs text-gray-600">
+                  ✓ Free shipping over $100
+                </p>
+                <p className="text-xs text-gray-600 mt-1">
+                  ✓ 30-day easy returns
+                </p>
               </div>
             </div>
           </div>

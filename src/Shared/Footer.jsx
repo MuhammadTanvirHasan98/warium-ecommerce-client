@@ -4,7 +4,7 @@ import paymentCards from '../assets/images/banner/payment.png'
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-gray-300 py-10 px-8">
+    <footer className="bg-gray-900 mt-20 text-gray-300 py-10 px-8">
       <div className="max-w-[1320px] mx-auto grid grid-cols-1 md:grid-cols-5 gap-8 border-b border-gray-700 pb-8">
         {/* Popular Categories */}
         <div>

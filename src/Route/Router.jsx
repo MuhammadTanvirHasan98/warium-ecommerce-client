@@ -36,6 +36,7 @@ import CheckoutPage from "../Pages/CheckOut/CheckoutPage";
 import NotFound from "../Pages/NotFound/NotFound";
 import PaymentFail from "../Pages/FailedPayment/Fail";
 import SuccessPayment from "../Pages/SuccessPayment/SuccessPayment";
+import VendorOrders from "../DashBoard/VendorDashboard/Vendor_Orders";
 
 export const router = createBrowserRouter([
   {
@@ -160,6 +161,10 @@ export const router = createBrowserRouter([
       {
         path: "vendor-track-shipping",
         element: <VendorTrackShipping></VendorTrackShipping>,
+      },
+      {
+        path: "vendor-orders",
+        element: <VendorOrders></VendorOrders>,
       },
       {
         path: "vendor-setting",

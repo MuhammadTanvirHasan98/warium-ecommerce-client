@@ -39,6 +39,7 @@ export default function CheckoutPage() {
   // -------------------------------
   // HANDLE PAYMENT SUBMIT
   // -------------------------------
+  console.log("Cart Items:", cartItems);
   const handleCreatePayment = async () => {
     if (!firstName || !lastName || !address || !city || !country || !phone) {
       alert("Please fill all required billing fields!");

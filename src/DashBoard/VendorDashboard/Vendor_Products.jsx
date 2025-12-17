@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { Pencil, Trash2 } from "lucide-react";
 import UseAuth from "../../hooks/UseAuth";
 import { useNavigate } from "react-router-dom";
+import useAxiosSecure from "../../hooks/UseAxiosSecure";
 
 const VendorProducts = () => {
   const { user } = UseAuth();
@@ -10,17 +10,22 @@ const VendorProducts = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
     if (!user?.email) return;
 
     const fetchProducts = async () => {
       try {
-        const res = await axios.get(
-          `https://warium-ecommerce-server-api.onrender.com/products?vendorEmail=${user.email}`
+        // const res = await axios.get(
+        //   `https://warium-ecommerce-server-api.onrender.com/products?vendorEmail=${user.email}`
+        // );
+        const res = await axiosSecure.get(
+          `/products?vendorEmail=${user.email}`
         );
         setProducts(res.data);
-      } catch (err) {
+      } catch (error) {
+        console.error("Error fetching products:", error);
         setError("Failed to fetch products");
       } finally {
         setLoading(false);
@@ -33,23 +38,23 @@ const VendorProducts = () => {
   const handleEdit = (product) => {
     console.log("Edit product:", product._id);
     localStorage.setItem("editProduct", JSON.stringify(product));
-    navigate(`/dashboard/vendor-upload/${product._id}`)
+    navigate(`/dashboard/vendor-upload/${product._id}`);
 
     // open edit modal or navigate
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this product?")) return;
+    if (!window.confirm("Are you sure you want to delete this product?"))
+      return;
 
     try {
-      await axios.delete(`https://warium-ecommerce-server-api.onrender.com/products/${id}`);
+      await axiosSecure.delete(`/products/${id}`);
       setProducts(products.filter((p) => p._id !== id));
     } catch (err) {
       console.error("Delete failed:", err);
       alert("Failed to delete product");
     }
   };
-
 
   console.log(products);
 

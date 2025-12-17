@@ -15,6 +15,7 @@ import {
   Shield,
   BarChart3,
   AlertTriangle,
+  CalendarArrowDown 
 } from "lucide-react";
 import profile  from "../assets/images/profile/profile.jpg"
 
@@ -51,7 +52,8 @@ const DashBoard = () => {
       { path: "/dashboard/vendors-products-details", label: "Dashboard", icon: LayoutDashboard },
       { path: "/dashboard/vendor-profile", label: "Public Profile", icon: User },
       { path: "/dashboard/vendor-upload", label: "Uploads", icon: Upload },
-      { path: "vendor-track-shipping", label: "Track Shipping", icon: Truck },
+      { path: "/dashboard/vendor-orders", label: "Orders", icon: CalendarArrowDown },
+      { path: "/dashboard/vendor-track-shipping", label: "Track Shipping", icon: Truck },
       { path: "/dashboard/vendor-products", label: "Products", icon: Package },
       { path: "/dashboard/vendor-setting", label: "Settings", icon: Settings },
     ],

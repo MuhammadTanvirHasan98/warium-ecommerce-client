@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { FaPlus } from "react-icons/fa";
 import { useParams } from "react-router-dom";
-import useAxiosPublic from "../../hooks/useAxiosPublic";
 import useAxiosSecure from "../../hooks/UseAxiosSecure";
 import UseAuth from "../../hooks/UseAuth";
 
-const imageHostingKey = import.meta.env.VITE_IMAGE_HOSTING_KEY;
-const imageHostingAPI = `https://api.imgbb.com/1/upload?key=${imageHostingKey}`;
 
 // Expanded color palette
 const colorPalette = {
@@ -37,7 +34,6 @@ const VendorUpload = () => {
   const [fullDetail, setFullDetail] = useState("");
   const [tags, setTags] = useState("");
   const { user } = UseAuth();
-  const axiosPublic = useAxiosPublic();
   const axiosSecure = useAxiosSecure();
   const { id } = useParams();
 
@@ -75,7 +71,7 @@ const VendorUpload = () => {
         setQuantity(product.quantity);
         setFullDetail(product.fullDetail);
         setTags((product.tags || []).join(","));
-        setImages(product.images?.[0]|| []);
+        setImages(product.images || []);
       } catch (err) {
         console.error("Failed to fetch product:", err);
         alert("Failed to load product data");
@@ -112,62 +108,60 @@ const VendorUpload = () => {
   };
 
   // Handle form submission
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  if (!user?.email) {
-    alert("User not logged in!");
-    return;
-  }
-
-  try {
-    const productData = {
-      userEmail: user.email,
-      productName,
-      category,
-      shortDesc,
-      colors: selectedColors,
-      sizes,
-      price,
-      oldPrice,
-      discount,
-      labelType,
-      quantity,
-      fullDetail,
-      tags: tags.split(",").map((t) => t.trim()),
-      images: images, // keep existing images as-is
-    };
-
-    if (isEdit) {
-      await axiosSecure.put(`/products/${productId}`, productData);
-      alert("Product updated successfully!");
-    } else {
-      await axiosSecure.post("/products", productData);
-      alert("Product uploaded successfully!");
+    if (!user?.email) {
+      alert("User not logged in!");
+      return;
     }
 
-    // Reset form (optional)
-    setProductName("");
-    setCategory("shirts");
-    setShortDesc("");
-    setSelectedColors([]);
-    setSizes([]);
-    setPrice("");
-    setOldPrice("");
-    setDiscount("");
-    setLabelType("New");
-    setQuantity("");
-    setFullDetail("");
-    setTags("");
-    setIsEdit(false);
-    setProductId(null);
+    try {
+      const productData = {
+        userEmail: user.email,
+        productName,
+        category,
+        shortDesc,
+        colors: selectedColors,
+        sizes,
+        price,
+        oldPrice,
+        discount,
+        labelType,
+        quantity,
+        fullDetail,
+        tags: tags.split(",").map((t) => t.trim()),
+        images: images, // keep existing images as-is
+      };
 
-  } catch (error) {
-    console.error("Error saving product:", error);
-    alert("Failed to save product.");
-  }
-};
+      if (isEdit) {
+        await axiosSecure.put(`/products/${productId}`, productData);
+        alert("Product updated successfully!");
+      } else {
+        await axiosSecure.post("/products", productData);
+        alert("Product uploaded successfully!");
+      }
 
+      // Reset form (optional)
+      setProductName("");
+      setCategory("shirts");
+      setShortDesc("");
+      setSelectedColors([]);
+      setSizes([]);
+      setPrice("");
+      setOldPrice("");
+      setDiscount("");
+      setLabelType("New");
+      setQuantity("");
+      setFullDetail("");
+      setTags("");
+      setIsEdit(false);
+      setProductId(null);
+    } catch (error) {
+      console.error("Error saving product:", error);
+      alert("Failed to save product.");
+    }
+  };
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-[1320px] mx-auto mt-10 mb-10">
@@ -232,7 +226,9 @@ const handleSubmit = async (e) => {
                         </button>
                       </>
                     ) : (
-                      <p className="text-xs text-gray-400 text-center">765 X 850</p>
+                      <p className="text-xs text-gray-400 text-center">
+                        765 X 850
+                      </p>
                     )}
                   </div>
                 ))}
@@ -293,7 +289,9 @@ const handleSubmit = async (e) => {
             {/* Colors & Sizes */}
             <div className="flex items-center gap-4">
               <div>
-                <label className="block text-sm font-semibold mb-1">Colors</label>
+                <label className="block text-sm font-semibold mb-1">
+                  Colors
+                </label>
                 <div className="flex flex-wrap gap-2">
                   {Object.entries(colorPalette).map(([name, className]) => (
                     <div
@@ -328,7 +326,9 @@ const handleSubmit = async (e) => {
             {/* Price, Quantity, Old Price, Discount */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-semibold mb-1">Price (USD)</label>
+                <label className="block text-sm font-semibold mb-1">
+                  Price (USD)
+                </label>
                 <input
                   type="number"
                   value={price}
@@ -339,7 +339,9 @@ const handleSubmit = async (e) => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold mb-1">Quantity</label>
+                <label className="block text-sm font-semibold mb-1">
+                  Quantity
+                </label>
                 <input
                   type="number"
                   value={quantity}
@@ -353,7 +355,9 @@ const handleSubmit = async (e) => {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-semibold mb-1">Old Price (USD)</label>
+                <label className="block text-sm font-semibold mb-1">
+                  Old Price (USD)
+                </label>
                 <input
                   type="number"
                   value={oldPrice}
@@ -363,7 +367,9 @@ const handleSubmit = async (e) => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold mb-1">Discount (%)</label>
+                <label className="block text-sm font-semibold mb-1">
+                  Discount (%)
+                </label>
                 <input
                   type="number"
                   value={discount}
@@ -376,7 +382,9 @@ const handleSubmit = async (e) => {
 
             {/* Label Type */}
             <div>
-              <label className="block text-sm font-semibold mb-1">Label Type</label>
+              <label className="block text-sm font-semibold mb-1">
+                Label Type
+              </label>
               <select
                 value={labelType}
                 onChange={(e) => setLabelType(e.target.value)}
@@ -389,7 +397,9 @@ const handleSubmit = async (e) => {
 
             {/* Full Detail */}
             <div>
-              <label className="block text-sm font-semibold mb-1">Full Detail</label>
+              <label className="block text-sm font-semibold mb-1">
+                Full Detail
+              </label>
               <textarea
                 value={fullDetail}
                 onChange={(e) => setFullDetail(e.target.value)}
@@ -401,7 +411,9 @@ const handleSubmit = async (e) => {
 
             {/* Tags */}
             <div>
-              <label className="block text-sm font-semibold mb-1">Product Tags (comma separated)</label>
+              <label className="block text-sm font-semibold mb-1">
+                Product Tags (comma separated)
+              </label>
               <input
                 type="text"
                 value={tags}
