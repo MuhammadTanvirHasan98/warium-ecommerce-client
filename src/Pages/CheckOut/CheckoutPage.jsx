@@ -53,7 +53,7 @@ export default function CheckoutPage() {
       date: new Date(),
       status: "pending",
       cartIds: cartItems.map(item => item._id),
-      menuItemIds: cartItems.map(item => item.ProductMainID),
+      products: cartItems.map(item => item),
 
       // Extra user billing info for backend if needed
       customerName: `${firstName} ${lastName}`,
